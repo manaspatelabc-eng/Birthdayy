@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+      max-width: 420px;
+      animation: fadeIn 1.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    h1 {
+      font-size: 2.4em;
+      color: #e91e63;
+      margin-bottom: 15px;
+      font-family: 'Brush Script MT', cursive;
+    }
+    p {
+      font-size: 1.1em;
+      color: #444;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .icons {
+      font-size: 2em;
+      margin-bottom: 15px;
+    }
+    button {
+      background: linear-gradient(135deg, #e91e63, #f48fb1);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      font-size: 1em;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(233,30,99,0.5);
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="card">
+    <div class="icons">🎂 🎉 🎈 🎁</div>
+    <h1>💖 Happy Birthday Princess 💖</h1>
+    <p>
+      May your day sparkle with joy and love, filled with laughter, sweet surprises, and magical moments. 
+      Shine bright like the star you are, and may this year bring you endless happiness, success, and unforgettable memories. 
+      Celebrate big, smile wide, and cherish every moment — because today is all about you! ✨
+    </p>
+    <button id="surpriseBtn">Tap to Celebrate 🎀</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confettiPieces = [];
+    const colors = ['#e91e63', '#f48fb1', '#ba68c8', '#81d4fa', '#fbc2eb'];
+
+    function ConfettiPiece(x, y) {
+      this.x = x || Math.random() * canvas.width;
+      this.y = y || Math.random() * canvas.height - canvas.height;
+      this.size = Math.random() * 8 + 4;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.speed = Math.random() * 3 + 2;
+      this.angle = Math.random() * 360;
+    }
+
+    function burstConfetti(x, y) {
+      for (let i = 0; i < 80; i++) {
+        confettiPieces.push(new ConfettiPiece(x, y));
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiPieces.forEach(piece => {
+        ctx.fillStyle = piece.color;
+        ctx.beginPath();
+        ctx.arc(piece.x, piece.y, piece.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        piece.y += piece.speed;
+        piece.x += Math.sin(piece.angle) * 0.5;
+
+        if (piece.y > canvas.height) {
+          piece.y = -10;
+          piece.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+
+    drawConfetti();
+
+    document.getElementById('surpriseBtn').addEventListener('click', () => {
+      burstConfetti(window.innerWidth / 2, window.innerHeight / 2);
+      alert("🎀 Surprise! You are loved and cherished. Have the best birthday ever! 💖");
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
